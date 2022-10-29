@@ -9,10 +9,14 @@ FILES=main.c
 
 all:
 	$(CC) $(CFLAGS) $(OFLAGS) oneCore.c -o oneCore
+	$(CC) $(CFLAGS) $(OFLAGS) multiCore.c -o multiCore
 
 
 clean:
-	@rm -Rf oneCore 
+	@rm -Rf oneCore multiCore 
 
 clean_data:
-	@rm -Rf data/*.dat 
+	@rm -Rf data/*.dat
+
+clean_png:
+	@rm -Rf *.png
