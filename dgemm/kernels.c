@@ -65,6 +65,7 @@ void dgemm_unroll4(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     for (u64 i = 0; i < n; i++) {
         for (u64 k = 0; k < n; k++) {
             const f64 _a_ = a[i * n + k];
+
             u64 modulo = n % UNROLL4;
             for (u64 j = 0; j < n - modulo; j += UNROLL4) {
                 c[i * n + j] += _a_ * b[k * n + j];
@@ -89,7 +90,8 @@ void dgemm_unroll8(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
         for (u64 k = 0; k < n; k++) {
             const f64 _a_ = a[i * n + k];
 
-            for (u64 j = 0; j < n; j += UNROLL8) {
+            u64 modulo = n % UNROLL8;
+            for (u64 j = 0; j < n - modulo; j += UNROLL8) {
                 c[i * n + j] += _a_ * b[k * n + j];
                 c[i * n + j + 1] += _a_ * b[k * n + j + 1];
                 c[i * n + j + 2] += _a_ * b[k * n + j + 2];
@@ -99,6 +101,11 @@ void dgemm_unroll8(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
                 c[i * n + j + 6] += _a_ * b[k * n + j + 6];
                 c[i * n + j + 7] += _a_ * b[k * n + j + 7];
             }
+ 
+            for (u64 j = n - modulo; j < n; j ++) {
+                c[i * n + j] += _a_ * b[k * n + j];
+            }
+
         }
     }
 }
@@ -111,7 +118,8 @@ void dgemm_unroll16(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
         for (u64 k = 0; k < n; k++) {
             const f64 _a_ = a[i * n + k];
 
-            for (u64 j = 0; j < n; j += UNROLL16) {
+            u64 modulo = n % UNROLL16;
+            for (u64 j = 0; j < n - modulo; j += UNROLL16) {
                 c[i * n + j] += _a_ * b[k * n + j];
                 c[i * n + j + 1] += _a_ * b[k * n + j + 1];
                 c[i * n + j + 2] += _a_ * b[k * n + j + 2];
@@ -129,7 +137,11 @@ void dgemm_unroll16(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
                 c[i * n + j + 14] += _a_ * b[k * n + j + 14];
                 c[i * n + j + 15] += _a_ * b[k * n + j + 15];
             }
-        }
+        
+            for (u64 j = n - modulo; j < n; j ++) {
+                c[i * n + j] += _a_ * b[k * n + j];
+            }
+}
     }
 }
 
