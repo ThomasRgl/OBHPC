@@ -39,6 +39,24 @@ void dgemm_iex(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     }
 }
 
+void dgemm_trans(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
+    
+    u64 i, j, k = 0;
+    f64 tmp = 0;
+    for ( i = 0; i < (n>>1); ++ i)
+        for ( j = 0; j < (n>>1); ++ j){
+            tmp = b[ i * n + j];
+            b[i * n + j] = b[j * n + i];
+            b[j * n + i] = tmp;
+        }
+
+    for ( i = 0; i < n; ++ i)
+        for ( j = 0; j < n; ++ j)
+            for ( k = 0; k < n; ++ k)
+                c [ i * n + j ] += a [i * n + k] * b [ j * n + k ];
+//
+}
+
 void dgemm_unroll4(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 #define UNROLL4 4
 
