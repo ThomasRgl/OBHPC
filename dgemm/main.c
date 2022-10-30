@@ -52,6 +52,7 @@ int main(int argc, char **argv) {
     run_benchmark("UNROLL4", dgemm_unroll4, n, r);
     run_benchmark("UNROLL8", dgemm_unroll8, n, r);
     run_benchmark("UNROLL16", dgemm_unroll16, n, r);
+    run_benchmark("CACHE_LINE", dgemm_CL, n, r);
     run_benchmark("CBLAS", dgemm_cblas, n, r);
 
     //
