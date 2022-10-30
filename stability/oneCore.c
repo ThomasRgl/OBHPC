@@ -47,6 +47,18 @@ void run_benchmark(const ascii *title, u64 N, u64 r, u64 sample) {
     //
     f64 elapsed = 0.0;
     struct timespec t1, t2;
+    
+    //heating
+    for (u64 j = 0; j < 10000; j++){
+        // printf("hello there\n");
+        __asm__ volatile (
+            "loop_heat:;\n"
+            "dec %[_N];\n"
+            "jnz loop_heat;\n"
+            :
+            : [_N] "r" (N)
+            : "cc", "memory" );
+    }
 
 
     //

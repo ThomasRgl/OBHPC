@@ -95,6 +95,19 @@ void * run_benchmark( void * voidArgs) {
     struct timespec t1, t2;
 
     pthread_barrier_wait(&barrier1);
+    
+    // heating
+    for (u64 j = 0; j < 1000; j++){
+        // printf("hello there\n");
+        __asm__ volatile (
+            "heat1:;\n"
+            "dec %[_N];\n"
+            "jnz heat1;\n"
+            :
+            : [_N] "r" (N)
+            : "cc", "memory" );
+    }
+
     //
     do {
         clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
@@ -114,6 +127,18 @@ void * run_benchmark( void * voidArgs) {
 
         elapsed = (f64)(t2.tv_nsec - t1.tv_nsec) / (f64)r;
     } while (elapsed <= 0.0);
+    
+    // do something while other threads finish their work
+    for (u64 j = 0; j < 1000; j++){
+            // printf("hello there\n");
+            __asm__ volatile (
+                "heat2:;\n"
+                "dec %[_N];\n"
+                "jnz heat2;\n"
+                :
+                : [_N] "r" (N)
+                : "cc", "memory" );
+        }
 
     // samples[i] = elapsed;
     f64 measure_freq = N / elapsed ;
