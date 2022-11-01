@@ -146,14 +146,14 @@ void dgemm_unroll16(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 }
 
 //
-// #define CLS  64
-// #define SM (CLS / sizeof (f64))
+#define CLS  64
+#define SM (CLS / sizeof (f64))
 //
 
-#define L2 64
-#define SM 32
-#define L3 16
-
+// #define L2 64
+// #define SM 32
+// #define L3 16
+//
 
 void dgemm_CL(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     f64 * ra = NULL;
@@ -173,22 +173,22 @@ void dgemm_CL(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 
 
 
-void dgemm_CL2(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
-    f64 * ra = NULL;
-    f64 * rb = NULL;
-    f64 * rc = NULL;
-    
-    u64 i, j, k, i2, k2, j2 = 0;
-    for( i = 0; i < n; i += L2 )
-        for( j = 0; j < n; j +=SM )
-            for( k= 0; k < n; k += L3)
-
-                for( i2 = 0, rc = &c[i * n + j], ra = &a[i * n + k]; i2 < L2; ++i2, rc += n, ra += n)
-                    for( k2 = 0, rb = &b[k * n + j]; k2 < L3; ++k2, rb += n)
-                        for( j2 = 0; j2 < SM; ++j2)
-                            rc[j2] += ra[k2] * rb[j2];
-
-}
+// void dgemm_CL2(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
+//     f64 * ra = NULL;
+//     f64 * rb = NULL;
+//     f64 * rc = NULL;
+//     
+//     u64 i, j, k, i2, k2, j2 = 0;
+//     for( i = 0; i < n; i += L2 )
+//         for( j = 0; j < n; j +=SM )
+//             for( k= 0; k < n; k += L3)
+//
+//                 for( i2 = 0, rc = &c[i * n + j], ra = &a[i * n + k]; i2 < L2; ++i2, rc += n, ra += n)
+//                     for( k2 = 0, rb = &b[k * n + j]; k2 < L3; ++k2, rb += n)
+//                         for( j2 = 0; j2 < SM; ++j2)
+//                             rc[j2] += ra[k2] * rb[j2];
+//
+// }
 
 
 void dgemm_cblas(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
