@@ -41,8 +41,8 @@ int main(int argc, char **argv) {
     u64 r = atoll(argv[2]);
 
     // Print header
-    printf("%15s; %15s; %15s; %10s; %10s; %15s; %15s; %15s; %26s; %10s; %10s\n",
-           "KiB", "MiB", "GiB", "n", "r", "min", "max", "mean",
+    printf("%10s; %15s; %15s; %15s; %10s; %10s; %15s; %15s; %15s; %26s; %10s; %10s\n",
+           "titre", "KiB", "MiB", "GiB", "n", "r", "min", "max", "mean",
            "stddev (%)", "MiB/s", "titre");
 
     run_benchmark("IJK", dgemm_ijk, n, r);
@@ -118,8 +118,9 @@ void run_benchmark(const ascii *title,
     f64 mbps = size_mib / (mean / 1e9);
 
     //
-    printf("%15.3lf; %15.3lf; %15.3lf; %10llu; %10llu; %15.3lf; %15.3lf; "
+    printf("%10s; %15.3lf; %15.3lf; %15.3lf; %10llu; %10llu; %15.3lf; %15.3lf; "
            "%15.3lf; %15.3lf (%6.3lf %%); %10.3lf; %10s\n",
+           title,
            3 * size_kib, // 3 matices
            3 * size_mib, // 3 matrices
            3 * size_gib, // 3 matrices
