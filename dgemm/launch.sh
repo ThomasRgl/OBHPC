@@ -6,7 +6,9 @@ N_list="16 32 64 128"
 
 mkdir -p data
 mkdir -p png
-rm png/*.png
+mkdir -p data/compiler
+mkdir -p data/func
+rm -Rf png/*.png
 
 for cc in $compilers; do
     
@@ -20,7 +22,6 @@ for cc in $compilers; do
     done
 done
 
-mkdir -p data/compiler
 
 for cc in $compilers; do
     
@@ -45,24 +46,26 @@ for cc in $compilers; do
 
 done
 
+file=data/16_gcc_dgemm.dat
+tmpfile=data/func/tmp.dat
 
-#
-# make -B CC=gcc
-#
-# echo "128"
-# ./dgemm 128 10 > data/128_gcc_dgemm.dat
-#
-# echo "64"
-# ./dgemm 64 10 > data/128_gcc_dgemm.dat
-#
-# echo "32"
-# ./dgemm 32 10 > data/128_gcc_dgemm.dat
-#
-# echo "16"
-# ./dgemm 16 10 > data/128_gcc_dgemm.dat
-#
-#
-# graph pour clang chaque fonction 16 128
-# graph pour gcc chaque fonction 16 128
-#
+
+funcs=$(awk -F ';' "{print \$1 }" ${file} |  tr -s "\n" ";" | cut -d ';' -f 2- | tr -s ";" " ")
+i=2
+for f in $funcs; do
+    out=data/func/${f}_dgemm.dat
+    cut -d ';' -f1 data/compiler/gcc_dgemm.dat > ${out}
+    for cc in $compilers; do
+        cut -d ';' -f${i} data/compiler/${cc}_dgemm.dat | sed -e "1 s/^[^\n]*/${cc}/" | paste -d ";" ${out} - > ${tmpfile}
+        cat ${tmpfile} > ${out} 
+    done 
+    i=$((i+1))
+done
+rm ${tmpfile}
+gnuplot -e "funcs='${funcs}'" plot2.gp
+
+
+
+
+
 
