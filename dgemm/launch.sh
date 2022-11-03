@@ -1,13 +1,17 @@
 #!/bin/bash
 
-
-compilers="clang gcc"
+declare -a flags_list=( "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
+compilers="aocc clang gcc"
 N_list="16 32 64 128"
+nb_cc=$(echo ${compilers} | wc -w)
+nb_flags=$(echo ${compilers} | wc -w)
 
+rm  data/*.dat
 mkdir -p data
 mkdir -p png
 mkdir -p data/compiler
 mkdir -p data/func
+mkdir -p data/flags
 rm -Rf png/*.png
 
 for cc in $compilers; do
@@ -62,7 +66,71 @@ for f in $funcs; do
     i=$((i+1))
 done
 rm ${tmpfile}
-gnuplot -e "funcs='${funcs}'" plot2.gp
+
+
+
+
+i=1
+for flags in "${flags_list[@]}"
+do
+    for cc in $compilers; do
+
+        echo "$cc $i ${flags} "
+        make -B CC=${cc} "OFLAGS=${flags}"
+
+        for N in $N_list; do
+
+            echo "$N"
+            ./dgemm ${N} 10 > data/flags/${N}_${cc}_${i}_dgemm.dat
+        done
+    done
+    i=$((i+1))
+done
+
+gnuplot -e "funcs='${funcs}';nb_cc=${nb_cc}"  plot2.gp
+
+
+
+file=data/16_gcc_dgemm.dat
+funcs=$(awk -F ';' "{print \$1 }" ${file} |  tr -s "\n" ";" | cut -d ';' -f 2- | tr -s ";" " ")
+i=2
+
+header="N"
+for ((i = 1 ; i <= nb_flags ; i++)); do
+    header="${header}; ${i}"
+done
+
+allFlags=""
+for flags in "${flags_list[@]}"; do
+    tmp=$(echo ${flags} | tr -s " " ",,")
+    allFlags="${allFlags} ${tmp}"
+done
+
+ifunc=1
+for func in $funcs; do
+    mkdir -p data/flags/${func}
+    for cc in $compilers; do
+        out=data/flags/${func}/${cc}_dgemm.dat
+        echo ${header} > ${out}
+        for N in $N_list; do
+            line="${N}"
+            iflag=1
+            for flags in "${flags_list[@]}"; do
+                file=data/flags/${N}_${cc}_${iflag}_dgemm.dat
+                line="${line};"
+                # echo ";" >> ${out}
+                val=$(awk -F ';' "{print \$11 }" ${file} | tr -s "\n" ";" | awk -F ';' "{print \$$((ifunc + 1)) }" )
+                line="${line} ${val}"
+                iflag=$((iflag+1))
+            done
+            echo ${line} >> ${out}
+        done
+    done
+    ifunc=$((ifunc+1))
+    echo ${allFlags}
+    gnuplot -e "func='${func}';nb_cc='${nb_cc}';compilers='${compilers}';nb_flags='${nb_flags}';flags='${allFlags}'"  plot3.gp
+done
+
 
 
 

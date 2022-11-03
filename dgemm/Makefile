@@ -1,7 +1,9 @@
 CFLAGS=-Wall 
 
-OFLAGS= -Ofast -march=native -mtune=native 
+OFLAGS= -O2 -march=native -mtune=native 
 
+CLANG=/usr/bin/clang
+AOCC=/opt/aocc/bin/clang
 
 INTEL_LFLAGS=-qmkl
 GNU_LFLAGS=-lm -lcblas
@@ -20,10 +22,18 @@ else
 ifeq ($(CC),gcc)
 	$(CC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
 else
+ifeq ($(CC),icc)
+	$(CC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(INTEL_LFLAGS)
+else
+ifeq ($(CC),aocc)
+	$(AOCC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
+else
 ifeq ($(CC),clang)
-	$(CC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
+	$(CLANG) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
 else
 	@echo "ERROR: no compiler specified using CC. Possible values for CC: gcc, icc, icx, clang"
+endif
+endif
 endif
 endif
 endif
@@ -31,3 +41,9 @@ endif
 
 clean:
 	@rm -Rf dgemm
+
+clean_data:
+	@rm -Rf data/*
+
+clean_png:
+	@rm -Rf *.png
