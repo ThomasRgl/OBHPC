@@ -8,7 +8,10 @@ AOCC=/opt/aocc/bin/clang
 INTEL_LFLAGS=-qmkl
 GNU_LFLAGS=-lm -lcblas
 
-FILES=main.c tools.c kernels.c
+# FILES=main.c tools.c kernels.c
+#FILES=verif.c tools.c kernels.c
+# FILES=verif.c tools.c kernels2.c
+FILES=main.c tools.c kernels2.c
 
 all: dgemm
 
