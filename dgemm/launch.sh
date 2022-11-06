@@ -1,10 +1,20 @@
 #!/bin/bash
 
-declare -a flags_list=( "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
+# declare -a flags_list=("-O0 -march=native -mtune=native" "-O1 -march=native -mtune=native" "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
+declare -a flags_list=("-O1 -march=native -mtune=native" "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
 compilers="aocc clang gcc"
 N_list="16 32 64 128"
 nb_cc=$(echo ${compilers} | wc -w)
-nb_flags=$(echo ${compilers} | wc -w)
+
+# nb_flags=$(echo ${flags_list} | wc -w)
+# nb_flags= ${#flags_list[@]}
+
+nb_flags=0;
+for flags in "${flags_list[@]}" 
+do
+    nb_flags=$((nb_flags+1))
+done
+echo "nb_flags=${nb_flags}"
 
 rm  data/*.dat
 mkdir -p data
