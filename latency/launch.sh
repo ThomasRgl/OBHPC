@@ -9,6 +9,6 @@ rm -Rf png/*.png
 
 make -B 
 # ./stability 10 
-./stability 1 > data/data.dat
+taskset -c 4 ./stability 1 > data/data.dat
 
 gnuplot plot.gp

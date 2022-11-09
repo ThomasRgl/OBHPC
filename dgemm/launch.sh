@@ -2,7 +2,7 @@
 
 # declare -a flags_list=("-O0 -march=native -mtune=native" "-O1 -march=native -mtune=native" "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
 declare -a flags_list=("-O1 -march=native -mtune=native" "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
-compilers="aocc clang gcc"
+compilers="clang gcc aocc icx"
 N_list="16 32 64 128"
 nb_cc=$(echo ${compilers} | wc -w)
 
@@ -16,7 +16,7 @@ do
 done
 echo "nb_flags=${nb_flags}"
 
-rm  data/*.dat
+rm -Rf data/*.dat
 mkdir -p data
 mkdir -p png
 mkdir -p data/compiler
@@ -26,13 +26,13 @@ rm -Rf png/*.png
 
 for cc in $compilers; do
     
+    echo "$cc"
+    make -B CC=${cc}
     for N in $N_list; do
         
-        echo "$cc"
-        make -B CC=${cc}
         
         echo "$N"
-        ./dgemm ${N} 10 > data/${N}_${cc}_dgemm.dat
+        taskset -c 4 ./dgemm ${N} 10 > data/${N}_${cc}_dgemm.dat
     done
 done
 
@@ -75,7 +75,7 @@ for f in $funcs; do
     done 
     i=$((i+1))
 done
-rm ${tmpfile}
+rm -Rf ${tmpfile}
 
 
 
@@ -91,7 +91,7 @@ do
         for N in $N_list; do
 
             echo "$N"
-            ./dgemm ${N} 10 > data/flags/${N}_${cc}_${i}_dgemm.dat
+            taskset -c 4 ./dgemm ${N} 10 > data/flags/${N}_${cc}_${i}_dgemm.dat
         done
     done
     i=$((i+1))

@@ -6,12 +6,12 @@ CLANG=/usr/bin/clang
 AOCC=/opt/aocc/bin/clang
 
 INTEL_LFLAGS=-qmkl
-GNU_LFLAGS=-lm -lcblas
+GNU_LFLAGS=-lm -llapack -lcblas
 
 # FILES=main.c tools.c kernels.c
 #FILES=verif.c tools.c kernels.c
 # FILES=verif.c tools.c kernels2.c
-FILES=main.c tools.c kernels2.c
+FILES=main.c tools.c kernels.c
 
 all: dgemm
 

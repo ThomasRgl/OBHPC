@@ -21,10 +21,9 @@ title1 = "jsp"
 set terminal "png" size 800,400
 set output img1
 
-plot \
-    "data/data.dat" using 2:7 w lp,\
-    "data/data.dat" using 2:8 w lp,\
-    "data/data.dat" using 2:9 w lp
+plot "data/data.dat" using 2:9 w lp
+    #"data/data.dat" using 2:7 w lp,\
+    #"data/data.dat" using 2:8 w lp,\
 
     
 
