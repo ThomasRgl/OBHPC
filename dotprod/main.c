@@ -123,7 +123,7 @@ void run_benchmark(const ascii *title,
 	 2 * size_gib, //2 arrays
 	 n,
 	 r,
-	 d,
+	 0*d,
 	 min,
 	 max,
 	 mean,

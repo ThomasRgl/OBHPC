@@ -3,6 +3,9 @@ CFLAGS= -Wall
 # OFLAGS=-Ofast -march=native -mtune=native
 OFLAGS= -O2 -march=native -mtune=native 
 
+AOCC=/opt/aocc/bin/clang
+
+
 INTEL_LFLAGS=-qmkl
 GNU_LFLAGS=-lm -lcblas -llapack
 
@@ -27,7 +30,7 @@ ifeq ($(CC),aocc)
 	$(AOCC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
 else
 ifeq ($(CC),clang)
-	$(CLANG) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
+	$(CC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
 else
 	@echo "ERROR: no compiler specified using CC. Possible values for CC: gcc, icc, icx, clang or aocc"
 endif
