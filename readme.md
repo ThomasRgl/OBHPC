@@ -1,23 +1,23 @@
 # Compte Rendu projet OBHPC
 
-## AMD RYZEN
+## I] AMD RYZEN
 
-### Compilers and environment
+### 1) Compilers and environment
 
-#### Compilers
+#### 1.1) Compilers
 
 * gcc (GCC) 12.2.0
 * clang version 14.0.6
 * AMD clang version 13.0.0 (CLANG: AOCC_3.2.0-Build#128 2021_11_12) (based on LLVM Mirror.Version.13.0.0)
 * Intel(R) oneAPI DPC++/C++ Compiler 2022.2.1
 
-#### Environment
+#### 1.2) Environment
 
 * les benchmarks ci-dessous n'ayant pas été multi-threadés tournent ont été fixés sur le core 4 avec taskset.
 * La fréquence du cpu a été réglée a son maximum grace au gouverneur 'performance' de cpupower
 * Le Turbo boost est activé 
 
-### Architecture
+### 2) Architecture
 
 
    * CPU name : AMD Ryzen 5 PRO 4650U 
@@ -32,13 +32,13 @@
    * Level 2 nb ways : 8
    * Level 3 cache size: 4MiB * 2 (shared between 3 cores)
    * Level 3 nb ways : 16
-   * RAM : 16 GiB =
+   * RAM : 16 GiB 
    * Instruction sets : SSE, AVX2
    * Min Frequency: 1.4 GHZ
    * Max Frequency: 2.1 GHZ
    * Turbo Frequency: 4.0 GHZ
 
-### STABILITY
+### 3) STABILITY
 
 Le but de ce benchmark est d'executer une fonction dont le nombre de cycles est déja connu, 
 puis de diviser le temps pris par cette fonction par le nombre de cycle théorique afin d'en 
@@ -58,7 +58,7 @@ todo
 
 todo
 
-### LATENCY
+### 4) LATENCY
 
 Le but de ce benchmark est de mettre en avant le temps d'acces aux différents caches.
 Pour cela, nous utilisions la fonction "pointeur chasing", qui utilise une liste de pointeur 
@@ -72,7 +72,7 @@ le meme que le temps d'acces au cache L1. Pareil pour le cache L2, L3 et la RAM.
 
 todo
 
-### DGEMM
+### 5) DGEMM
 
 Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
 résoudre des multiplications de matrices. 
@@ -82,13 +82,13 @@ Ces critères seront :
     * le compilateur
     * les flags d'optimisations
 
-#### Comparaison des compilateurs sur chaque fonction
+#### 5.1) Comparaison des compilateurs sur chaque fonction
 
 ![ performance des compilateurs sur chaque fonction](dgemm/png/funcs.png)
 
 todo
 
-#### Comparaison des fonctions pour chaque compilateur
+#### 5.2) Comparaison des fonctions pour chaque compilateur
 
 ![ performance de chaque fonction avec gcc](dgemm/png/gcc.png)
 
@@ -100,7 +100,7 @@ todo
 
 todo
 
-#### Comparaison de la performance des flags d'optimisation
+#### 5.3) Comparaison de la performance des flags d'optimisation
 
 ![ comparaison des différents flags d'optimisation sur la fonction ijk](dgemm/png/IJK.png)
 
@@ -121,7 +121,7 @@ todo
 ![ comparaison des différents flags d'optimisation sur la fonction cblas](dgemm/png/CBLAS.png)
 
 
-### DOTPROD
+### 6) DOTPROD
 
 Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
 effectuer des dotprods. 
@@ -131,13 +131,13 @@ Ces critères seront :
     * le compilateur
     * les flags d'optimisations
 
-#### Comparaison des compilateurs sur chaque fonction
+#### 6.1) Comparaison des compilateurs sur chaque fonction
 
 ![ performance des compilateurs sur chaque fonction](dotprod/png/funcs.png)
 
 todo
 
-#### Comparaison des fonctions pour chaque compilateur
+#### 6.2) Comparaison des fonctions pour chaque compilateur
 
 ![ performance de chaque fonction avec gcc](dotprod/png/gcc.png)
 
@@ -149,7 +149,7 @@ todo
 
 todo
 
-#### Comparaison de la performance des flags d'optimisation
+#### 6.3) Comparaison de la performance des flags d'optimisation
 
 ![ comparaison des différents flags d'optimisation sur la fonction basique](dotprod/png/BASE.png)
 
@@ -161,7 +161,7 @@ todo
 
 
 
-### REDUC
+### 7) REDUC
 
 Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
 effectuer des dotprods. 
@@ -171,13 +171,13 @@ Ces critères seront :
     * le compilateur
     * les flags d'optimisations
 
-#### Comparaison des compilateurs sur chaque fonction
+#### 7.1) Comparaison des compilateurs sur chaque fonction
 
 ![ performance des compilateurs sur chaque fonction](reduc/png/funcs.png)
 
 todo
 
-#### Comparaison des fonctions pour chaque compilateur
+#### 7.2) Comparaison des fonctions pour chaque compilateur
 
 ![ performance de chaque fonction avec gcc](reduc/png/gcc.png)
 
@@ -189,7 +189,7 @@ todo
 
 todo
 
-#### Comparaison de la performance des flags d'optimisation
+#### 7.3) Comparaison de la performance des flags d'optimisation
 
 ![ comparaison des différents flags d'optimisation sur la fonction basique](reduc/png/BASE.png)
 
