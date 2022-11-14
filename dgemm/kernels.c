@@ -39,6 +39,8 @@ void dgemm_iex(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     }
 }
 
+// transpose b matrix, then do a dgemm ijk.
+// this transposition allow to compute the dgemm without looping through columns (theorically better for the L1 cache)
 void dgemm_trans(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     
     u64 i, j, k = 0;
@@ -58,7 +60,7 @@ void dgemm_trans(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 }
 
 
-
+// unroll4, divide by 4 the number of loop iteration 
 void dgemm_unroll4(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 #define UNROLL4 4
 
@@ -82,7 +84,7 @@ void dgemm_unroll4(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     }
 }
 
-//
+// same with unroll8
 void dgemm_unroll8(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 #define UNROLL8 8
 
@@ -110,7 +112,7 @@ void dgemm_unroll8(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     }
 }
 
-//
+// same with unroll16
 void dgemm_unroll16(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 #define UNROLL16 16
 
@@ -155,6 +157,8 @@ void dgemm_unroll16(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 // #define L3 16
 //
 
+// this code work on small parts of the matrices in order to optimize the L1 cache and the cacheLine usage.
+
 void dgemm_CL(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     f64 * ra = NULL;
     f64 * rb = NULL;
@@ -191,6 +195,7 @@ void dgemm_CL(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
 // }
 
 
+// cblas
 void dgemm_cblas(f64 *restrict a, f64 *restrict b, f64 *restrict c, u64 n) {
     cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, 1.0, a, n,
                 b, n, 0.0, c, n);

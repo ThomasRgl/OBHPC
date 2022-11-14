@@ -19,7 +19,7 @@ set boxwidth 0.75
 
 
 img1 = "png/".func.".png"
-title1 = "Il va falloir trouver un vrai titre"
+title1 = "DGEMM : Comparaison des différents Oflag sur ". func
 
 set yrange [0:5000]
 

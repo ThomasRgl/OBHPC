@@ -16,11 +16,6 @@ typedef struct thread_args
 }thread_args;
 
 
-//
-// #include "tools.h"
-
-//
-// #include "kernels.h"
 
 //
 #define ALIGN64 64

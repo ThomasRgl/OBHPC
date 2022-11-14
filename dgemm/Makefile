@@ -32,9 +32,9 @@ ifeq ($(CC),aocc)
 	$(AOCC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
 else
 ifeq ($(CC),clang)
-	$(CLANG) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
+	$(CC) $(CFLAGS) $(OFLAGS) $(FILES) -o $@ $(GNU_LFLAGS)
 else
-	@echo "ERROR: no compiler specified using CC. Possible values for CC: gcc, icc, icx, clang"
+	@echo "ERROR: no compiler specified using CC. Possible values for CC: gcc, icc, icx, clang or aocc"
 endif
 endif
 endif

@@ -20,7 +20,7 @@ set boxwidth 0.5
 set xtic rotate by -45 scale 0 
 
 img1 = "png/".cc.".png"
-title1 = "jsp"
+title1 = "DGEMM : Comparaison des différentes fonctions compilées avec ". cc
 
 ##
 set terminal "png" size 800,400

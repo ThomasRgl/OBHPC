@@ -16,7 +16,7 @@ do
 done
 echo "nb_flags=${nb_flags}"
 
-rm -Rf data/*.dat
+rm -Rf data/*
 mkdir -p data
 mkdir -p png
 mkdir -p data/compiler
