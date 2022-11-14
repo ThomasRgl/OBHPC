@@ -13,7 +13,7 @@
 
 #### 1.2) Environment
 
-* les benchmarks ci-dessous n'ayant pas été multi-threadés tournent ont été fixés sur le core 4 avec taskset.
+* les benchmarks ci-dessous qui ne sont pas multi-threadés sont fixés sur le core 4 avec taskset.
 * La fréquence du cpu a été réglée a son maximum grace au gouverneur 'performance' de cpupower
 * Le Turbo boost est activé 
 
@@ -52,11 +52,15 @@ quand ils sont executés en parallèle. (voir figure 2)
 
 ![stability benchmark on one core](stability/core.png)
 
-todo
+Le benchmark de stabilité sur un coeur semble assez stable, sur l'ensemble, avec une centaine 
+d'anomalies sur les 10000 tests effectués, probablement du aux autres processus.
 
 ![stability benchmark on multiple cores](stability/multicore.png)
 
-todo
+Ce benchmark sur N core semble beaucoup moins stable contrairement au précédent. 
+La fréquence reste stable à 4GHZ jusqu'à 5 cores en parallèles. A partir de 6 core, 
+la fréquence devient instable et oscille entre 4GHZ et 2.1GHZ. Il semble que le turbo
+Boost a du mal à booster les 12 cores au même moment.
 
 ### 4) LATENCY
 
@@ -70,7 +74,12 @@ le meme que le temps d'acces au cache L1. Pareil pour le cache L2, L3 et la RAM.
 
 ![latency benchmark ](latency/png/image.png)
 
-todo
+Le graphe ne semble pas totalement cohérent, l'implémentation du test est probablement incorecte.
+On retrouve bien le premier pallier L1 jusqu'à 192 Kib, cependant la limite entre le pallier
+L2 et L3 entre 256 et 1000 ce qui ne correspond pas à la taille théorique du cache L2.
+On retrouve cependant bien le cache L3 théorique aux alentour de 8Mib. 
+Ensuite la latence explose de maniere assez instable, ce qui correspond à l'acces à la RAM.
+
 
 ### 5) DGEMM
 
@@ -86,7 +95,10 @@ Ces critères seront :
 
 ![ performance des compilateurs sur chaque fonction](dgemm/png/funcs.png)
 
-todo
+Dans l'ensemble Aocc performe assez mal sur sur la fonction IEX et IJK. Ce qui est décevant 
+pour un compilateur amd sur un cpu amd. Aussi, Clang performe globlement mieux que gcc, sauf 
+pout l'unroll 4 ou clang semble avoir du mal.
+Et pour terminer, ICX performe plutot bien sur une amd.
 
 #### 5.2) Comparaison des fonctions pour chaque compilateur
 
@@ -98,7 +110,12 @@ todo
 
 ![ performance de chaque fonction avec icx](dgemm/png/icx.png)
 
-todo
+Sur les 4 compilateurs, la fonction CacheLine semble etre largment supérieur aux autres. 
+A l'exeption de la fonction cblas (lapack) qui semble performer mieux quand la matrice est grande.
+La fonction IKJ et IEX ont des résultats assez similaire sur gcc, aocc et icx. En comparant les binaires,
+on remarque que les binaires pour IKJ et IEX sont identiques.
+Aussi, la fonction Trans qui devait théoriquement fonctionner, ne semble absolument pas fonctioner sur des cpu modernes.
+
 
 #### 5.3) Comparaison de la performance des flags d'optimisation
 
@@ -120,6 +137,9 @@ todo
 
 ![ comparaison des différents flags d'optimisation sur la fonction cblas](dgemm/png/CBLAS.png)
 
+Les flags d'optimisations ont assez peu d'effets. En effet on ne retrouve pas des grosse
+différence entre 02 03 et 0fast. Cependant, la fonction Trans semble devenir valable avec des flags Ofast.
+
 
 ### 6) DOTPROD
 
@@ -135,7 +155,9 @@ Ces critères seront :
 
 ![ performance des compilateurs sur chaque fonction](dotprod/png/funcs.png)
 
-todo
+pour le dotprod, on remarque que la fonction icx semble performer bien mieux que les autres 
+compilateurs sur BASE et UNROLL8, mais est dans la moyenne pour UNROLL4.
+Les clang performe assez mal sur les 3 fonctions.
 
 #### 6.2) Comparaison des fonctions pour chaque compilateur
 
@@ -147,7 +169,8 @@ todo
 
 ![ performance de chaque fonction avec icx](dotprod/png/icx.png)
 
-todo
+sur ces graphes, on remarque bien que icx surperforme par rapport aux autres fonctions.
+Analyser l'asm produit semble nécessaire pour comprendre exactement pourquoi ce compilateur surperforme sur le dotprod
 
 #### 6.3) Comparaison de la performance des flags d'optimisation
 
@@ -157,6 +180,8 @@ todo
 
 ![ comparaison des différents flags d'optimisation sur la fonction unroll8](dotprod/png/UNROLL8.png)
 
+On remarqe ici que le flag d'optimisation Ofast est ultra efficace et augment jusqu'à 10 fois 
+les performances, en atteignant les 100Gib/s avec clang.
 <!-- ![ comparaison des différents flags d'optimisation sur la fonction cblas](dotprod/png/CBLAS.png) -->
 
 
@@ -175,7 +200,6 @@ Ces critères seront :
 
 ![ performance des compilateurs sur chaque fonction](reduc/png/funcs.png)
 
-todo
 
 #### 7.2) Comparaison des fonctions pour chaque compilateur
 
@@ -187,7 +211,6 @@ todo
 
 ![ performance de chaque fonction avec icx](reduc/png/icx.png)
 
-todo
 
 #### 7.3) Comparaison de la performance des flags d'optimisation
 
@@ -197,23 +220,4 @@ todo
 
 ![ comparaison des différents flags d'optimisation sur la fonction unroll8](reduc/png/UNROLL8.png)
 
-
-<!-- ## INTEL 1 -->
-<!---->
-<!-- ### PRESENTATION PC -->
-<!-- ### STABILITY -->
-<!-- ### LATENCY -->
-<!-- ### DGEMM -->
-<!-- ### DOTPROD -->
-<!-- ### REDUC -->
-<!---->
-<!---->
-<!-- ## INTEL 2 -->
-<!---->
-<!-- ### PRESENTATION PC -->
-<!-- ### STABILITY -->
-<!-- ### LATENCY -->
-<!-- ### DGEMM -->
-<!-- ### DOTPROD -->
-<!-- ### REDUC -->
-<!---->
+Comme sur dotprod, on remarque aussi que le flag Ofast surperforme jusqu'à *10 par rapport aux autres flags.
