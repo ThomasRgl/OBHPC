@@ -1,6 +1,6 @@
 #!/bin/bash
 # declare -a flags_list=("-O0 -march=native -mtune=native" "-O1 -march=native -mtune=native" "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
-declare -a flags_list=("-O1 -march=native -mtune=native" "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O2 -march=native -mtune=native" )
+declare -a flags_list=("-O2 -march=native -mtune=native" "-O3 -march=native -mtune=native" "-Ofast -march=native -mtune=native" "-O1 -march=native -mtune=native" )
 compilers="clang gcc aocc icx"
 # N_list="100 1000 10000 100000"
 N_list="1000 10000  100000 1000000 "

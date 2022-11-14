@@ -21,7 +21,7 @@ set boxwidth 0.75
 img1 = "png/".func.".png"
 title1 = " DOTPROD : Comparaison effets des différents Oflag sur ".func.". "
 
-set yrange [0:10000]
+#set yrange [0:40000]
 
 ##
 set terminal "png" size 1600,1600

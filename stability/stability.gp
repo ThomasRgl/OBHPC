@@ -1,6 +1,6 @@
 #core=12
 img1 = "multicore.png"
-title1 = "mesure de la stabilité cpu"
+title1 = "mesure de stabilité sur n cpu en parallèle"
 
 ##
 set terminal "png" size 800,400
@@ -38,7 +38,7 @@ set multiplot layout quartCore,4 rowsfirst title title1
 
 #plot  "data/3_Core.dat" using 1:5 
 do for [i=1:core-1] {
-    plot "data/".i."_Core.dat" using 1:5 notitle
+    plot "data/".i."_Core.dat" using 1:5 notitle lw 2
     } 
 unset multiplot
 
@@ -46,7 +46,7 @@ unset multiplot
 #####################################################
 
 img1 = "core.png"
-title1 = "mesure de la stabilité cpu"
+title1 = "mesure de stabilité cpu"
 
 ##
 set terminal "png" size 800,400
@@ -62,7 +62,7 @@ set auto x
 set grid
 
 #
-#set title title1
+set title title1
 #set key autotitle columnhead
 set xlabel "cores id"
 set ylabel "GHZ" 

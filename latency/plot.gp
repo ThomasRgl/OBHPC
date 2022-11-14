@@ -1,6 +1,7 @@
 #
 set datafile separator ";"
 
+
 #
 set grid
 
@@ -15,7 +16,9 @@ set logscale x 2
 set xtic rotate by -45 scale 0 
 
 img1 = "png/image.png"
-title1 = "jsp"
+title1 = "data access latency"
+
+set title title1
 
 ##
 set terminal "png" size 800,400

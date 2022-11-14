@@ -21,15 +21,15 @@ set boxwidth 0.75
 img1 = "png/funcs.png"
 title1 = "REDUC : comparaison des différents compilateurs"
 
-set yrange [0:10000]
+set yrange [0:30000]
 
 ##
-set terminal "png" size 1600,1600
+set terminal "png" size 1600,400
 set output img1
 
 
 #
-set multiplot layout 3,3 rowsfirst title title1 
+set multiplot layout 1,3 rowsfirst title title1 
 #set multiplot 
 
 
