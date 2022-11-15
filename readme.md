@@ -2,26 +2,49 @@
 
 # Compte Rendu projet OBHPC
 
+## Executer le projet
+
+Afin de lancer tout le projet, il faut executer `./launch.sh` à la racine du projet.
+Attention, cela va automatiquement regenérer toute les .dat ainsi que tout les .png, ce qui rendra le readme.md non cohérent.
+Afin d'executer le projet, il est nécéssaire d'avoir les compilateurs clang gcc icx et aocc. Si ce n'est pas le cas, il est possible de modifier
+les compilateurs appelés en changeant dgemm/launch.sh, dotprod/launch.sh, reduc/launch.sh .
+
 ## Sommaire
 1.   [Compiler and environment](#1-compilers-and-environment)
-1.3. [Compiler](#11-compilers)
-1.2. [Environment](#12-environment)
-2.   [Architecture](#2-architecture)
-3.   [Stability](#3-stability)
-4.   [Latency](#4-latency)
-5.   [DGEMM](#5-dgemm)
-5.1. [comparaison compilateur](#51-comparaison-des-compilateurs-sur-chaque-fonction)
-5.2. [comparaison fonction](#52-comparaison-des-fonctions-pour-chaque-compilateur)
-5.3. [comparaison Oflag](#53-comparaison-de-la-performance-des-flags-d'optimisation)
-6.   [DOTPROD](#6-dotprod)
-6.1. [comparaison compilateur](#61-comparaison-des-compilateurs-sur-chaque-fonction)
-6.2. [comparaison fonction](#62-comparaison-des-fonctions-pour-chaque-compilateur)
-6.3. [comparaison Oflag](#63-comparaison-de-la-performance-des-flags-d'optimisation)
-7.   [REDUC](#7-reduc)
-7.1. [comparaison compilateur](#71-comparaison-des-compilateurs-sur-chaque-fonction)
-7.2. [comparaison fonction](#72-comparaison-des-fonctions-pour-chaque-compilateur)
-7.3. [comparaison Oflag](#73-comparaison-de-la-performance-des-flags-d'optimisation)
 
+1.3. [Compiler](#11-compilers)
+
+1.2. [Environment](#12-environment)
+
+2.   [Architecture](#2-architecture)
+
+3.   [Stability](#3-stability)
+
+4.   [Latency](#4-latency)
+
+5.   [DGEMM](#5-dgemm)
+
+5.1. [comparaison compilateur](#51-comparaison-des-compilateurs-sur-chaque-fonction)
+
+5.2. [comparaison fonction](#52-comparaison-des-fonctions-pour-chaque-compilateur)
+
+5.3. [comparaison Oflag](#53-comparaison-de-la-performance-des-flags-doptimisation)
+
+6.   [DOTPROD](#6-dotprod)
+
+6.1. [comparaison compilateur](#61-comparaison-des-compilateurs-sur-chaque-fonction)
+
+6.2. [comparaison fonction](#62-comparaison-des-fonctions-pour-chaque-compilateur)
+
+6.3. [comparaison Oflag](#63-comparaison-de-la-performance-des-flags-doptimisation)
+
+7.   [REDUC](#7-reduc)
+
+7.1. [comparaison compilateur](#71-comparaison-des-compilateurs-sur-chaque-fonction)
+
+7.2. [comparaison fonction](#72-comparaison-des-fonctions-pour-chaque-compilateur)
+
+7.3. [comparaison Oflag](#73-comparaison-de-la-performance-des-flags-doptimisation)
 
 
 <!-- ## [A] I] AMD RYZEN -->
@@ -74,7 +97,7 @@ core au cours du temps. (voir figure 1)
 Puis il est executé en parallèle sur 1,2,3,...,n cores afin de voir la stabilité de chaque core 
 quand ils sont executés en parallèle. (voir figure 2)
 
-![stability benchmark on one core](stability/core.png)
+ ![stability benchmark on one core](stability/core.png)
 
 Le benchmark de stabilité sur un coeur semble assez stable, sur l'ensemble, avec une centaine 
 d'anomalies sur les 10000 tests effectués, probablement du aux autres processus.
@@ -105,15 +128,35 @@ On retrouve cependant bien le cache L3 théorique aux alentour de 8Mib.
 Ensuite la latence explose de maniere assez instable, ce qui correspond à l'acces à la RAM.
 
 
-## 5) DGEMM
+## Notes :
 
-Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
-résoudre des multiplications de matrices. 
+Les benchmarks ci dessous s'interesseront à 3 algorithmes importants dans le monde du HPC.
+ * Dgemm : Double-precision, GEneral Matrix-Matrix multiplication.
+ * Reduc : double-precision array reduction.
+ * dotprod ou scalar product.
+
+ Nous nous interesserons principalement à la bande passante plutot qu'au temps nécessaire pour executer ces algorithmes.
+ En effet, la bande passante nous en apprend plus sur la réel capacité du processeur à traiter ces algorithmes.
+
+Les histogrames présents ci dessous représentent compareront l'efficacité de divers critères pour 
+résoudre les 3 algorithmes. 
 Ces critères seront : 
 
     * la fonction utilisée pour résoudre la dgemm
     * le compilateur
     * les flags d'optimisations
+    
+    
+## 5) DGEMM
+
+Le probleme de multiplication de matrice a une complexité de O(N³), on s'attend donc à voir une grosse augmentation 
+du temps de calcul quand la matrice s'aggrandit. De meme pour la bande passante, on s'attend à une forte baisse.
+
+A noter que la taille des matrices est la suivante : 
+ * 16*16 : 6Kib -> 18Kib pour les matrices a b c. Rentre dans le cache L1.
+ * 32*32 : 24Kib -> 72Kib pour a b c. Rentre dans le cache L2.
+ * 64*64 : 96Kib -> 288Kib pour a b c. rentre dans le cache L2.
+ * 128*128 : 384Kib -> 1012 pour a b c, rentre dans le cache L3.
 
 ### 5.1) Comparaison des compilateurs sur chaque fonction
 
@@ -167,13 +210,7 @@ différence entre 02 03 et 0fast. Cependant, la fonction Trans semble devenir va
 
 ## 6) DOTPROD
 
-Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
-effectuer des dotprods. 
-Ces critères seront : 
 
-    * la fonction utilisée pour résoudre un dotprod
-    * le compilateur
-    * les flags d'optimisations
 
 ### 6.1) Comparaison des compilateurs sur chaque fonction
 
@@ -212,13 +249,6 @@ les performances, en atteignant les 100Gib/s avec clang.
 
 ## 7) REDUC
 
-Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
-effectuer des dotprods. 
-Ces critères seront : 
-
-    * la fonction utilisée pour résoudre un reduc
-    * le compilateur
-    * les flags d'optimisations
 
 ### 7.1) Comparaison des compilateurs sur chaque fonction
 
