@@ -1,23 +1,47 @@
+# Table of Contents
+
 # Compte Rendu projet OBHPC
 
-## I] AMD RYZEN
+## Sommaire
+1.   [Compiler and environment](#1-compilers-and-environment)
+1.3. [Compiler](#11-compilers)
+1.2. [Environment](#12-environment)
+2.   [Architecture](#2-architecture)
+3.   [Stability](#3-stability)
+4.   [Latency](#4-latency)
+5.   [DGEMM](#5-dgemm)
+5.1. [comparaison compilateur](#51-comparaison-des-compilateurs-sur-chaque-fonction)
+5.2. [comparaison fonction](#52-comparaison-des-fonctions-pour-chaque-compilateur)
+5.3. [comparaison Oflag](#53-comparaison-de-la-performance-des-flags-d'optimisation)
+6.   [DOTPROD](#6-dotprod)
+6.1. [comparaison compilateur](#61-comparaison-des-compilateurs-sur-chaque-fonction)
+6.2. [comparaison fonction](#62-comparaison-des-fonctions-pour-chaque-compilateur)
+6.3. [comparaison Oflag](#63-comparaison-de-la-performance-des-flags-d'optimisation)
+7.   [REDUC](#7-reduc)
+7.1. [comparaison compilateur](#71-comparaison-des-compilateurs-sur-chaque-fonction)
+7.2. [comparaison fonction](#72-comparaison-des-fonctions-pour-chaque-compilateur)
+7.3. [comparaison Oflag](#73-comparaison-de-la-performance-des-flags-d'optimisation)
 
-### 1) Compilers and environment
 
-#### 1.1) Compilers
+
+<!-- ## [A] I] AMD RYZEN -->
+
+## 1) Compilers and environment
+
+### 1.1) Compilers
 
 * gcc (GCC) 12.2.0
 * clang version 14.0.6
 * AMD clang version 13.0.0 (CLANG: AOCC_3.2.0-Build#128 2021_11_12) (based on LLVM Mirror.Version.13.0.0)
 * Intel(R) oneAPI DPC++/C++ Compiler 2022.2.1
 
-#### 1.2) Environment
+### 1.2) Environment
 
 * les benchmarks ci-dessous qui ne sont pas multi-threadés sont fixés sur le core 4 avec taskset.
 * La fréquence du cpu a été réglée a son maximum grace au gouverneur 'performance' de cpupower
 * Le Turbo boost est activé 
 
-### 2) Architecture
+## 2) Architecture
 
 
    * CPU name : AMD Ryzen 5 PRO 4650U 
@@ -38,7 +62,7 @@
    * Max Frequency: 2.1 GHZ
    * Turbo Frequency: 4.0 GHZ
 
-### 3) STABILITY
+## 3) STABILITY
 
 Le but de ce benchmark est d'executer une fonction dont le nombre de cycles est déja connu, 
 puis de diviser le temps pris par cette fonction par le nombre de cycle théorique afin d'en 
@@ -62,7 +86,7 @@ La fréquence reste stable à 4GHZ jusqu'à 5 cores en parallèles. A partir de 
 la fréquence devient instable et oscille entre 4GHZ et 2.1GHZ. Il semble que le turbo
 Boost a du mal à booster les 12 cores au même moment.
 
-### 4) LATENCY
+## 4) LATENCY
 
 Le but de ce benchmark est de mettre en avant le temps d'acces aux différents caches.
 Pour cela, nous utilisions la fonction "pointeur chasing", qui utilise une liste de pointeur 
@@ -81,7 +105,7 @@ On retrouve cependant bien le cache L3 théorique aux alentour de 8Mib.
 Ensuite la latence explose de maniere assez instable, ce qui correspond à l'acces à la RAM.
 
 
-### 5) DGEMM
+## 5) DGEMM
 
 Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
 résoudre des multiplications de matrices. 
@@ -91,7 +115,7 @@ Ces critères seront :
     * le compilateur
     * les flags d'optimisations
 
-#### 5.1) Comparaison des compilateurs sur chaque fonction
+### 5.1) Comparaison des compilateurs sur chaque fonction
 
 ![ performance des compilateurs sur chaque fonction](dgemm/png/funcs.png)
 
@@ -100,7 +124,7 @@ pour un compilateur amd sur un cpu amd. Aussi, Clang performe globlement mieux q
 pout l'unroll 4 ou clang semble avoir du mal.
 Et pour terminer, ICX performe plutot bien sur une amd.
 
-#### 5.2) Comparaison des fonctions pour chaque compilateur
+### 5.2) Comparaison des fonctions pour chaque compilateur
 
 ![ performance de chaque fonction avec gcc](dgemm/png/gcc.png)
 
@@ -117,7 +141,7 @@ on remarque que les binaires pour IKJ et IEX sont identiques.
 Aussi, la fonction Trans qui devait théoriquement fonctionner, ne semble absolument pas fonctioner sur des cpu modernes.
 
 
-#### 5.3) Comparaison de la performance des flags d'optimisation
+### 5.3) Comparaison de la performance des flags d'optimisation
 
 ![ comparaison des différents flags d'optimisation sur la fonction ijk](dgemm/png/IJK.png)
 
@@ -141,7 +165,7 @@ Les flags d'optimisations ont assez peu d'effets. En effet on ne retrouve pas de
 différence entre 02 03 et 0fast. Cependant, la fonction Trans semble devenir valable avec des flags Ofast.
 
 
-### 6) DOTPROD
+## 6) DOTPROD
 
 Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
 effectuer des dotprods. 
@@ -151,7 +175,7 @@ Ces critères seront :
     * le compilateur
     * les flags d'optimisations
 
-#### 6.1) Comparaison des compilateurs sur chaque fonction
+### 6.1) Comparaison des compilateurs sur chaque fonction
 
 ![ performance des compilateurs sur chaque fonction](dotprod/png/funcs.png)
 
@@ -159,7 +183,7 @@ pour le dotprod, on remarque que la fonction icx semble performer bien mieux que
 compilateurs sur BASE et UNROLL8, mais est dans la moyenne pour UNROLL4.
 Les clang performe assez mal sur les 3 fonctions.
 
-#### 6.2) Comparaison des fonctions pour chaque compilateur
+### 6.2) Comparaison des fonctions pour chaque compilateur
 
 ![ performance de chaque fonction avec gcc](dotprod/png/gcc.png)
 
@@ -172,7 +196,7 @@ Les clang performe assez mal sur les 3 fonctions.
 sur ces graphes, on remarque bien que icx surperforme par rapport aux autres fonctions.
 Analyser l'asm produit semble nécessaire pour comprendre exactement pourquoi ce compilateur surperforme sur le dotprod
 
-#### 6.3) Comparaison de la performance des flags d'optimisation
+### 6.3) Comparaison de la performance des flags d'optimisation
 
 ![ comparaison des différents flags d'optimisation sur la fonction basique](dotprod/png/BASE.png)
 
@@ -186,7 +210,7 @@ les performances, en atteignant les 100Gib/s avec clang.
 
 
 
-### 7) REDUC
+## 7) REDUC
 
 Les histogrames présents ci dessous représentent comparent l'efficacité de divers critères pour 
 effectuer des dotprods. 
@@ -196,12 +220,12 @@ Ces critères seront :
     * le compilateur
     * les flags d'optimisations
 
-#### 7.1) Comparaison des compilateurs sur chaque fonction
+### 7.1) Comparaison des compilateurs sur chaque fonction
 
 ![ performance des compilateurs sur chaque fonction](reduc/png/funcs.png)
 
 
-#### 7.2) Comparaison des fonctions pour chaque compilateur
+### 7.2) Comparaison des fonctions pour chaque compilateur
 
 ![ performance de chaque fonction avec gcc](reduc/png/gcc.png)
 
@@ -212,7 +236,7 @@ Ces critères seront :
 ![ performance de chaque fonction avec icx](reduc/png/icx.png)
 
 
-#### 7.3) Comparaison de la performance des flags d'optimisation
+### 7.3) Comparaison de la performance des flags d'optimisation
 
 ![ comparaison des différents flags d'optimisation sur la fonction basique](reduc/png/BASE.png)
 
