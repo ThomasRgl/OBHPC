@@ -11,6 +11,7 @@ set ylabel "cycles"
 set xlabel "size" 
 
 set logscale x 2
+set logscale y 2
 
 
 set xtic rotate by -45 scale 0 

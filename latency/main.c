@@ -47,9 +47,9 @@ int main(int argc, char **argv) {
            "stddev (%)", "MiB/s", "titre");
     
     for (u64 i = 8; i < 24; i++ ){
-        for(u64 j = 0; j < 5; j++){
+        for(u64 j = 0; j < 20; j++){
             // run_benchmark("POINT", pointer_chasing, pow(2,i+j*0.1), r);
-            run_benchmark("POINT", pointer_chasing, pow(2,i+j*0.2), r);
+            run_benchmark("POINT", pointer_chasing, pow(2,i+j*0.05), r);
         
         }
          
@@ -101,7 +101,7 @@ void run_benchmark(const ascii *title,
             t2 = rdtsc();
             // clock_gettime(CLOCK_MONOTONIC_RAW, &t2);
 
-            elapsed = (f64)(t2 - t1) / (f64)(r * iteration);
+            elapsed = (f64)(t2 - t1) / (f64)(r * iteration * 16);
         } while (elapsed <= 0.0);
 
         samples[i] = elapsed;
