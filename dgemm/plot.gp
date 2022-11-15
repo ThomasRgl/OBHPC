@@ -22,6 +22,7 @@ set xtic rotate by -45 scale 0
 img1 = "png/".cc.".png"
 title1 = "DGEMM : Comparaison des différentes fonctions compilées avec ". cc
 
+set title title1
 ##
 set terminal "png" size 800,400
 set output img1
